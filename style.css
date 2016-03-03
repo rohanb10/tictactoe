@@ -1,5 +1,5 @@
 body,html {
-	font-family: 'Slabo 27px', serif;
+	font-family: 'Roboto', serif;
 	width: 100%;
 	height: 100%;
 	overflow-x: hidden; 
@@ -12,11 +12,18 @@ body,html {
 	transform: translateY(-25%);
 	-webkit-transform: translateY(-25%);
 }
+.large span{
+	font-size: 700%;
+	min-width: 18vh;
+	vertical-align: middle;
+}
 .small {
 	border-collapse: collapse;
 }
 .small td {
 	border: 1px solid black;
+	font-size: initial;
+	font-size: 210%;
 }
 .small tr:first-child td {
 	border-top: 0;
@@ -49,9 +56,13 @@ html {
 }
 .large {
 	margin: 0 auto;
+	font-family: 'Raleway', sans-serif;
 }
 .switch {
 	position: fixed;
 	width: 100%;
 	bottom: 0;
+}
+#p-symbol{
+	font-size: 150%;
 }

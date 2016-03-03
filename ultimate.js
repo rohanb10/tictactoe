@@ -14,6 +14,8 @@ var movesPlayed = [
 var win = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]];
 var completed = [];
 
+var gameOver=false;
+
 $(".tile").click(function(event) {
 	var tileClicked = $(this).data('tile');
 	var boardClicked = $(this).data('board');
@@ -23,7 +25,7 @@ $(".tile").click(function(event) {
 	})[0];
 	var color = ($(this).css('background-color')).toString();
 	//second condition is to ensure correct board is selected
-	if($(this).text()=="" && (color=='rgb(204, 204, 204)' || turns==0)){
+	if($(this).text()=="" && (color=='rgb(204, 204, 204)' || turns==0) && !gameOver){
 		previous = tileClicked;
 		var player = newTurn();
 		$(this).text(player);
@@ -31,13 +33,14 @@ $(".tile").click(function(event) {
 		currentBoard.numMoves++;
 		if(checkSmall(currentBoard.board,currentBoard.moves,player)){
 			currentBoard.winner = player;
+			$(".board"+currentBoard.board).empty();
+			$(".board"+currentBoard.board).append("<span>&nbsp;"+player.toUpperCase()+"&nbsp;</span>");
 		}
 		if(currentBoard.numMoves>=9 && currentBoard.winner==""){
 			currentBoard.winner="tie"
 			completed[currentBoard.board]="tie";
 		}
 		colour(tileClicked);
-		console.log(completed);
 	}
 });
 
@@ -46,11 +49,10 @@ function checkSmall(index, board, player){
 		if(board[win[i][0]]==player && board[win[i][1]]==player && board[win[i][2]]==player){
 			completed[index]=player;
 			if(checkBig(player)){
-				alert("Game over! Player "+player+" wins!");
+				$(".message").empty();
+				$(".message").append('Player '+player.toUpperCase()+' wins!');
 			}
-			else{
-				return true;
-			}
+			return true;
 		}
 	}
 }
@@ -58,13 +60,19 @@ function checkSmall(index, board, player){
 function checkBig(player){
 	for(var i=0;i<win.length;i++){
 		if(completed[win[i][0]]==player && completed[win[i][1]]==player && completed[win[i][2]]==player){
+			gameOver = true;
 			return true;
 		}
 	}
 }
 
 function colour(tile){
-	if(completed[tile]==null){
+	if(gameOver){
+		$(".tile").each(function(index, el) {
+			$(this).css('background-color', '#FFFFFF');
+		});
+	}
+	else if(completed[tile]==null){
 		$(".tile").each(function(index, el) {
 			if($(this).data('board')==tile){
 				$(this).css('background-color', '#CCCCCC');
@@ -97,3 +105,9 @@ function newTurn(){
 		return "o";
 	}
 }
+
+$(window).bind('beforeunload', function(){
+	if(turns>0 && !gameOver){
+		// return 'There is a game in progress.';
+	}
+});
