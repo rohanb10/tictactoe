@@ -108,6 +108,6 @@ function newTurn(){
 
 $(window).bind('beforeunload', function(){
 	if(turns>0 && !gameOver){
-		// return 'There is a game in progress.';
+		return 'There is a game in progress.';
 	}
 });
